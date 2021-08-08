@@ -19,6 +19,12 @@
 
 ### 使用方法
 
+#### 0. 克隆项目到本地
+
+```ba
+git clone git@github.com:Chorer/WoZaiXiaoYuanPuncher-cloudFunction.git
+```
+
 #### 1. 获取 pushPlus 的 token
 
 微信搜索公众号“pushplus 推送加”，关注后即可生成属于自己的 token，后面需要用到
@@ -26,9 +32,13 @@
 #### 2. 获取 leanCloud 的应用凭证
 
 1）[注册 leanCloud 账号](https://console.leancloud.cn/apps) 
+
 2）到控制台新建应用，应用名字随意，应用版本选择 **开发版**
+
 3）进入应用，点击左侧的“数据存储 ➡ 结构化数据”，新建 Class：名称为“Jwsession”，Class 访问权限为“所有用户”，下面的 ACL 权限选择“限制写入”
+
 4）进入刚才创建的 Class，添加新列，值为“jwsession”；如果你知道如何抓包获取自己的 jwsession，则添加新行并填入 jwsession 值，否则不用管它。最后，记住 “objectId” 这一列的值，待会需要用到
+
 5）点击左侧的“设置 ➡ 应用凭证”，记住 appId 和 masterKey（**请务必自己保管好，不要泄露**） 的值，待会需要用到
 
 
@@ -36,7 +46,7 @@
 
 1）注册腾讯云账号并登录，进行实名认证
 
-2）到 https://console.cloud.tencent.com/scf/list?rid=1&ns=default ，选择 “新建云函数” ➔ “自定义创建”，提交方法选择“本地上传文件夹”，选中 `autocheck_cloudFunction` 文件夹上传，点击“完成”即可创建云函数
+2）到 https://console.cloud.tencent.com/scf/list?rid=1&ns=default ，选择 “新建云函数” ➔ “自定义创建”，提交方法选择“本地上传文件夹”，选中 `WoZaiXiaoYuanPuncher-cloudFunction/src` 文件夹上传，点击“完成”即可创建云函数
 
 #### 4. 修改配置文件
 
