@@ -1,5 +1,4 @@
 # WoZaiXiaoYuanPuncher-cloudFunction
-
 我在校园自动打卡程序：[WoZaiXiaoYuanPuncher](https://github.com/zimin9/WoZaiXiaoYuanPuncher) 的云函数版本
 
 ### 版本说明
@@ -8,19 +7,14 @@
 
 ### 更新情况
 
-2021-8-9
-
-* 根据所在城市和学校名自动获取所有地址信息并进行存储，无需再进行抓包和手动配置
-* 减少大量配置项
-
 2021-8-8
 
-* 云函数不支持通过读写文件的方式持久化存储数据，且云数据库收费，因此接入 leanCloud 存储数据
+* 云函数不支持通过读写文件的方式持久化存储数据，且云数据库收费，因此接入 leanCloud 保存 jwsession
 
 2021-8-4 
 
 * 消息提醒服务从喵提醒改为 pushPlus，不需要再手动激活 48 小时
-* 缓存 jwsession 到本地，避免频繁登录可能导致的账户出错问题v
+* 缓存 jwsession 到本地，避免频繁登录可能导致的账户出错问题
 * 优化代码结构
 
 ### 使用方法
@@ -41,9 +35,9 @@ git clone git@github.com:Chorer/WoZaiXiaoYuanPuncher-cloudFunction.git
 
 2）到控制台新建应用，应用名字随意，应用版本选择 **开发版**
 
-3）进入应用，点击左侧的“数据存储 ➡ 结构化数据”，新建 Class：名称为“Info”，Class 访问权限为“所有用户”，下面的 ACL 权限选择“限制写入”
+3）进入应用，点击左侧的“数据存储 ➡ 结构化数据”，新建 Class：名称为“Jwsession”，Class 访问权限为“所有用户”，下面的 ACL 权限选择“限制写入”
 
-4）进入刚才创建的 Class，添加新列，值为“jwsession”；如果你知道如何抓包获取自己的 jwsession，则添加新行并填入 jwsession 值，否则不用管它。
+4）进入刚才创建的 Class，添加新列，值为“jwsession”；如果你知道如何抓包获取自己的 jwsession，则添加新行并填入 jwsession 值，否则不用管它。最后，记住 “objectId” 这一列的值，待会需要用到
 
 5）点击左侧的“设置 ➡ 应用凭证”，记住 appId 和 masterKey（**请务必自己保管好，不要泄露**） 的值，待会需要用到
 
@@ -63,8 +57,8 @@ git clone git@github.com:Chorer/WoZaiXiaoYuanPuncher-cloudFunction.git
 * `username`：“我在校园”的账号，一般是你的手机号码
 * `password`：“我在校园”的密码，忘记了打开小程序重新设置就行
 * `temperature`：默认上报的体温为 36°C，如果你想随机上报体温，请以“36~38”的形式填写
-* `city`：你学校所在的城市
-* `school`：你学校的名字
+* `latitude` 和 `longitude`：你学校的经度和纬度，通过 [腾讯地图](https://lbs.qq.com/service/webService/webServiceGuide/webServiceGeocoder) 可查
+* 剩下的配置项代表你学校的地址（具体到街），手动填写即可（广财本部校区的学生，这里不用改）
 
 2）“pushPlus” 账号配置项说明：
 
@@ -75,6 +69,7 @@ git clone git@github.com:Chorer/WoZaiXiaoYuanPuncher-cloudFunction.git
 
 * `appId`：之前在 leanCloud 获取的 appId
 * `masterKey`：之前在 leanCloud 获取的 masterKey
+* `objectId`：之前在 leanCloud 获取的 objectId
 
 #### 5. 安装 leanCloud 库
 
@@ -126,13 +121,11 @@ pip3 install leancloud -t .
 
 待优化功能。很可能是因为频繁登录导致的，这时候就别依赖云函数模拟登录获取 jwsession 了，请自己手动抓包获取 jwsession，填入 leanCloud 的 Class 中 
 
-**5）不能自动定位吗？**
-初始的想法是通过“请求地址的 ip ➡ 经纬度 ➡ 具体地址”这样的路径获取一个结构化的地址，用户无需进行任何配置，但是 PC 上定位经常不准（比如说我用 PC 端小程序打卡，定位的也是另一个市区）。所以最终还是通过“城市名+学校名 ➡ 经纬度 ➡ 具体地址”来拿到地址，无论如何，配置项已经非常少了。
+**4）怎么知道 `config.json` 中的地址配置项填什么？**
 
-**6）地址是否准确？**
-脚本使用的是和小程序一样的高德地图 API，准确性基本没问题                      
+待优化功能。这一块建议还是自己通过 Fiddler 抓包小程序的请求，获取自己学校的具体地址和经纬度，你手动填写的话可能不是很准确
 
-**7）leanCloud 库可以选择其它安装路径吗？**
+**5）leanCloud 库可以选择其它安装路径吗？**
 
 不建议。你需要通过 `sys.path` 修改导包路径，很麻烦，而且会遇到其它依赖导入路径出错的问题。所以最简单的方法就是直接安装在 `index.py` 的所在路径下。
 
@@ -142,8 +135,13 @@ pip3 install leancloud -t .
 
 ### 声明
 
-- 本项目仅供编程学习/个人使用，请遵守Apache-2.0 License开源项目授权协议
+- 本项目仅供编程学习/个人使用，请遵守 Apache-2.0 License 开源项目授权协议
 - 请在国家法律法规和校方相关原则下使用
 - 开发者不对任何下载者和使用者的任何行为负责
 - 无任何后门，也不获取、存储任何信息
 - 请务必不要泄露你的 masterKey 或 jwsession
+
+
+
+
+
