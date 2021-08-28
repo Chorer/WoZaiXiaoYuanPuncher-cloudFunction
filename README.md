@@ -43,7 +43,7 @@ git clone git@github.com:Chorer/WoZaiXiaoYuanPuncher-cloudFunction.git
 
 3）进入应用，点击左侧的“数据存储 ➡ 结构化数据”，新建 Class：名称为“Info”，Class 访问权限为“所有用户”，下面的 ACL 权限选择“限制写入”
 
-4）进入刚才创建的 Class，添加新列，值为“jwsession”；如果你知道如何抓包获取自己的 jwsession，则添加新行并填入 jwsession 值，否则不用管它。
+4）进入刚才创建的 Class，添加新列，值为“jwsession”，之后添加新行，注意这时候 objectId 会有一个值。如果你知道如何抓包获取自己的 jwsession，则可以填入 jwsession 值，否则不用管它。
 
 5）点击左侧的“设置 ➡ 应用凭证”，记住 appId 和 masterKey（**请务必自己保管好，不要泄露**） 的值，待会需要用到
 
